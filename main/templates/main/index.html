@@ -1,0 +1,10 @@
+{% extends 'main/shablon1.html' %}
+
+{% block title %}Перша сторінка сайту{% endblock %}
+
+{% block content %}
+    <h1> сторінка 1</h1>
+    <p>ст1</p>
+
+    <a href="{% url 'about' %}">Про сайт</a>
+{% endblock %}
