@@ -1,10 +1,50 @@
-{% extends 'main/shablon1.html' %}
+﻿{% extends 'main/base.html' %}
 
-{% block title %}Перша сторінка сайту{% endblock %}
+{% block title %}Головна{% endblock %}
 
 {% block content %}
-    <h1> сторінка 1</h1>
-    <p>ст1</p>
+<div class="row">
+    <div class="col-12 mb-4">
+        <h2 class="h4">Список товарів</h2>
+        <p class="text-muted">Брендів: {{ brands_count }} | Товарів у вибірці: {{ chips_count }}</p>
+    </div>
+</div>
 
-    <a href="{% url 'about' %}">Про сайт</a>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for item in chips_list %}
+        <div class="col">
+            <article class="card h-100 shadow-sm">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <span>Немає фото</span>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Бренд: {{ item.brand.name }}</h6>
+                    <p class="card-text text-truncate">{{ item.description|default:'Без опису' }}</p>
+                    <p class="card-text small">
+                        <strong>Смаки:</strong>
+                        {% for flavor in item.flavors.all %}
+                            <span class="badge bg-info text-dark">{{ flavor.name }}</span>
+                        {% empty %}
+                            Не вказано
+                        {% endfor %}
+                    </p>
+                </div>
+            </article>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Дані ще не додані</h4>
+                <p>У БД поки що немає товарів для показу. Додай записи через адмінку Django.</p>
+                <hr>
+                <a class="btn btn-primary" href="/admin/">Перейти в адмінку</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

@@ -30,13 +30,10 @@ class Chips(models.Model):
 
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     flavors = models.ManyToManyField(Flavor)
+    image = models.ImageField(upload_to='chips_images/', blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name} ({self.brand})"
-
-created_at = models.DateTimeField(auto_now_add=True, null=True)
-updated_at = models.DateTimeField(auto_now=True, null=True)
-# Create your models here.

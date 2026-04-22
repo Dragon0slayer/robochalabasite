@@ -1,9 +1,11 @@
-{% extends 'main/shablon1.html' %}
+﻿{% extends 'main/base.html' %}
 
-{% block title %}Сторінка про сторінку{% endblock %}
+{% block title %}Про сайт{% endblock %}
 
 {% block content %}
-    <h1> сторінка</h1>
-    <p>да.</p>
-    <a href="{% url 'index' %}">На головну сорінку</a>
+<section>
+    <h2>Про сайт</h2>
+    <p>Це навчальний Django-проєкт для демонстрації шаблонізатора, базового шаблону та виводу даних з БД.</p>
+    <a class="btn" href="{% url 'index' %}">Повернутися на головну</a>
+</section>
 {% endblock %}
