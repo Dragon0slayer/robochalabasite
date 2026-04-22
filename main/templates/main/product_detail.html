@@ -3,6 +3,7 @@
 {% block title %}{{ chips.name }}{% endblock %}
 
 {% block content %}
+<script src="{% static 'main/js/product_detail.js' %}" defer></script>
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-decoration-none">Головна</a></li>
@@ -82,37 +83,4 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const quantityInput = document.getElementById('quantity');
-        const btnMinus = document.getElementById('btn-minus');
-        const btnPlus = document.getElementById('btn-plus');
-        const totalPriceElement = document.getElementById('total-price');
-        const basePrice = parseFloat(document.getElementById('base-price').dataset.price);
-
-        function updatePrice() {
-            let quantity = parseInt(quantityInput.value);
-            if (isNaN(quantity) || quantity < 1) {
-                quantity = 1;
-                quantityInput.value = 1;
-            }
-            const total = (basePrice * quantity).toFixed(2);
-            totalPriceElement.textContent = total + ' грн';
-        }
-
-        btnMinus.addEventListener('click', function() {
-            if (parseInt(quantityInput.value) > 1) {
-                quantityInput.value = parseInt(quantityInput.value) - 1;
-                updatePrice();
-            }
-        });
-
-        btnPlus.addEventListener('click', function() {
-            quantityInput.value = parseInt(quantityInput.value) + 1;
-            updatePrice();
-        });
-
-        quantityInput.addEventListener('input', updatePrice);
-    });
-</script>
 {% endblock %}
