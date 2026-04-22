@@ -1,9 +1,17 @@
-﻿from django.shortcuts import render
+﻿from django.shortcuts import render, get_object_or_404
 
 from .models import Brand, Chips
 
 
 def index(request):
+    brands = Brand.objects.order_by('name')
+    context = {
+        'brands': brands,
+    }
+    return render(request, 'main/index.html', context)
+
+
+def products_list(request):
     brands = Brand.objects.order_by('name')
     selected_brand_id = request.GET.get('brand')
 
@@ -18,7 +26,16 @@ def index(request):
         'brands_count': brands.count(),
         'chips_count': chips_queryset.count(),
     }
-    return render(request, 'main/index.html', context)
+    return render(request, 'main/products.html', context)
+
+
+def product_detail(request, pk):
+    chips = get_object_or_404(Chips.objects.select_related('brand').prefetch_related('flavors'), pk=pk)
+    context = {
+        'chips': chips,
+        'brands': Brand.objects.order_by('name'),
+    }
+    return render(request, 'main/product_detail.html', context)
 
 
 def about(request):

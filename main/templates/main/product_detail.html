@@ -1,0 +1,118 @@
+{% extends 'main/base.html' %}
+
+{% block title %}{{ chips.name }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-decoration-none">Головна</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'products_list' %}" class="text-decoration-none">Товари</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ chips.name }}</li>
+    </ol>
+</nav>
+
+<div class="row g-5">
+    <!-- Зображення товару -->
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm overflow-hidden">
+            {% if chips.image %}
+                <img src="{{ chips.image.url }}" class="img-fluid rounded" alt="{{ chips.name }}">
+            {% else %}
+                <div class="bg-secondary-subtle text-muted d-flex align-items-center justify-content-center rounded" style="min-height: 400px;">
+                    <span class="fs-4 italic">Фото відсутнє</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Інформація про товар -->
+    <div class="col-md-6">
+        <div class="ps-lg-4">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill mb-3 uppercase">
+                {{ chips.brand.name }}
+            </span>
+            <h1 class="display-5 fw-bold mb-3 text-dark">{{ chips.name }}</h1>
+            
+            <div class="mb-4">
+                <h3 class="text-primary fw-bold" id="base-price" data-price="{{ chips.price }}">
+                    {{ chips.price }} грн
+                </h3>
+            </div>
+
+            <p class="lead text-muted mb-4">
+                {{ chips.description|default:'Опис для цього товару скоро з’явиться. Слідкуйте за оновленнями!' }}
+            </p>
+
+            <div class="mb-4">
+                <h5 class="fw-bold mb-3">Смаки:</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for flavor in chips.flavors.all %}
+                        <span class="badge bg-light text-dark border px-3 py-2">{{ flavor.name }}</span>
+                    {% empty %}
+                        <span class="text-muted small italic">Без специфічних смаків</span>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Вибір кількості та підрахунок ціни -->
+            <div class="bg-white p-4 rounded-3 border shadow-sm">
+                <div class="row align-items-center g-3">
+                    <div class="col-sm-6">
+                        <label for="quantity" class="form-label fw-bold">Кількість:</label>
+                        <div class="input-group">
+                            <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
+                            <input type="number" id="quantity" class="form-control text-center fw-bold" value="1" min="1">
+                            <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-sm-end">
+                        <p class="mb-1 text-muted small">Разом до сплати:</p>
+                        <h2 class="text-dark fw-bold mb-0" id="total-price">
+                            {{ chips.price }} грн
+                        </h2>
+                    </div>
+                </div>
+                <div class="d-grid mt-4">
+                    <button class="btn btn-primary btn-lg shadow-sm">Додати у кошик</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('quantity');
+        const btnMinus = document.getElementById('btn-minus');
+        const btnPlus = document.getElementById('btn-plus');
+        const totalPriceElement = document.getElementById('total-price');
+        const basePrice = parseFloat(document.getElementById('base-price').dataset.price);
+
+        function updatePrice() {
+            let quantity = parseInt(quantityInput.value);
+            if (isNaN(quantity) || quantity < 1) {
+                quantity = 1;
+                quantityInput.value = 1;
+            }
+            const total = (basePrice * quantity).toFixed(2);
+            totalPriceElement.textContent = total + ' грн';
+        }
+
+        btnMinus.addEventListener('click', function() {
+            if (parseInt(quantityInput.value) > 1) {
+                quantityInput.value = parseInt(quantityInput.value) - 1;
+                updatePrice();
+            }
+        });
+
+        btnPlus.addEventListener('click', function() {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            updatePrice();
+        });
+
+        quantityInput.addEventListener('input', updatePrice);
+    });
+</script>
+{% endblock %}

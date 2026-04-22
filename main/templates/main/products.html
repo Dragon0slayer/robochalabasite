@@ -1,0 +1,74 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Наші товари{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5">
+    <div class="col-md-8">
+        <h2 class="display-5 fw-bold text-primary">Наші Чіпси</h2>
+        <p class="text-muted lead">Знайдіть свій ідеальний смак серед {{ chips_count }} товарів від {{ brands_count }} брендів.</p>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm bg-light p-3">
+            <form method="get" action="{% url 'products_list' %}" class="d-flex flex-column gap-2">
+                <label for="brand" class="fw-semibold text-dark mb-0">Фільтр за брендом:</label>
+                <select name="brand" id="brand" class="form-select border-primary" onchange="this.form.submit()">
+                    <option value="">Всі бренди</option>
+                    {% for brand in brands %}
+                        <option value="{{ brand.id }}" {% if selected_brand_id == brand.id|stringformat:'s' %}selected{% endif %}>
+                            {{ brand.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% if selected_brand_id %}
+                    <a href="{% url 'products_list' %}" class="btn btn-link btn-sm text-decoration-none text-muted p-0 text-start">Скинути фільтр</a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+    {% for item in chips_list %}
+        <div class="col">
+            <article class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+                <a href="{% url 'product_detail' item.pk %}" class="text-decoration-none text-dark h-100 d-flex flex-column">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" class="card-img-top rounded-top" alt="{{ item.name }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary-subtle text-muted d-flex align-items-center justify-content-center rounded-top" style="height: 250px;">
+                            <span class="fs-5 italic">Фото відсутнє</span>
+                        </div>
+                    {% endif %}
+                    <div class="card-body p-4">
+                        <div class="mb-2 d-flex justify-content-between align-items-center">
+                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill small uppercase">
+                                {{ item.brand.name }}
+                            </span>
+                            <span class="fw-bold text-primary">{{ item.price }} грн</span>
+                        </div>
+                        <h5 class="card-title fw-bold mb-3 h4">{{ item.name }}</h5>
+                        <p class="card-text text-muted mb-4 line-clamp-2">{{ item.description|default:'Ці чіпси настільки особливі, що не потребують опису.' }}</p>
+                        <div class="d-flex flex-wrap gap-1 mt-auto">
+                            {% for flavor in item.flavors.all %}
+                                <span class="badge bg-light text-dark border px-2 py-1 small">{{ flavor.name }}</span>
+                            {% empty %}
+                                <span class="text-muted small italic">Без специфічних смаків</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </a>
+            </article>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="text-center py-5">
+                <div class="display-1 text-muted mb-4">🛒</div>
+                <h3 class="fw-bold">Товарів поки немає</h3>
+                <p class="text-muted mb-4">На жаль, за вашим запитом нічого не знайдено.</p>
+                <a href="{% url 'products_list' %}" class="btn btn-outline-primary px-4">Показати всі товари</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -31,6 +31,7 @@ class Chips(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     flavors = models.ManyToManyField(Flavor)
     image = models.ImageField(upload_to='chips_images/', blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
