@@ -31,7 +31,14 @@
                     <a class="nav-link" href="{% url 'about' %}">Про сайт</a>
                 </li>
             </ul>
-            <div class="d-flex">
+            <div class="d-flex align-items-center gap-2">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="btn btn-outline-light">Особистий кабінет</a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-light">Вийти</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-outline-light">Увійти</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Зареєструватись</a>
+                {% endif %}
                 <a href="{% url 'cart_detail' %}" class="btn btn-outline-light position-relative">
                     <i class="bi bi-cart3"></i> Кошик
                 </a>

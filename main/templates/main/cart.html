@@ -82,7 +82,11 @@
                     <span class="h4 fw-bold text-primary mb-0">{{ cart.total_price }} грн</span>
                 </div>
                 <div class="d-grid">
-                    <button class="btn btn-primary btn-lg shadow-sm" {% if not cart.items.all %}disabled{% endif %}>Оформити замовлення</button>
+                    {% if cart.items.all %}
+                        <a href="{% url 'checkout' %}" class="btn btn-primary btn-lg shadow-sm">Оформити замовлення</a>
+                    {% else %}
+                        <button class="btn btn-primary btn-lg shadow-sm" disabled>Оформити замовлення</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
