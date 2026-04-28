@@ -39,6 +39,18 @@
                 <h3 class="text-primary fw-bold" id="base-price" data-price="{{ chips.price }}">
                     {{ chips.price }} грн
                 </h3>
+                <div class="mt-2">
+                    <span class="text-warning">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= chips.average_rating %}
+                                <i class="bi bi-star-fill"></i>
+                            {% else %}
+                                <i class="bi bi-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                    <span class="ms-2 text-muted">({{ chips.average_rating|stringformat:".1f" }} / 5)</span>
+                </div>
             </div>
 
             <p class="lead text-muted mb-4">
@@ -60,26 +72,89 @@
 
             <!-- Вибір кількості та підрахунок ціни -->
             <div class="bg-white p-4 rounded-3 border shadow-sm">
-                <div class="row align-items-center g-3">
-                    <div class="col-sm-6">
-                        <label for="quantity" class="form-label fw-bold">Кількість:</label>
-                        <div class="input-group">
-                            <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
-                            <input type="number" id="quantity" class="form-control text-center fw-bold" value="1" min="1">
-                            <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
+                <form action="{% url 'add_to_cart' chips.pk %}" method="post">
+                    {% csrf_token %}
+                    <div class="row align-items-center g-3">
+                        <div class="col-sm-6">
+                            <label for="quantity" class="form-label fw-bold">Кількість:</label>
+                            <div class="input-group">
+                                <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
+                                <input type="number" name="quantity" id="quantity" class="form-control text-center fw-bold" value="1" min="1">
+                                <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 text-sm-end">
+                            <p class="mb-1 text-muted small">Разом до сплати:</p>
+                            <h2 class="text-dark fw-bold mb-0" id="total-price">
+                                {{ chips.price }} грн
+                            </h2>
                         </div>
                     </div>
-                    <div class="col-sm-6 text-sm-end">
-                        <p class="mb-1 text-muted small">Разом до сплати:</p>
-                        <h2 class="text-dark fw-bold mb-0" id="total-price">
-                            {{ chips.price }} грн
-                        </h2>
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm">Додати у кошик</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-lg-8 mx-auto">
+        <hr class="mb-5">
+        <h3 class="fw-bold mb-4">Відгуки та оцінка</h3>
+        
+        <div class="card border-0 shadow-sm mb-5">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-3">Залишити відгук</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Ваше ім'я</label>
+                            {{ review_form.author }}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-bold">Оцінка</label>
+                            {{ review_form.rating }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold">Ваш відгук</label>
+                            {{ review_form.text }}
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Відправити відгук</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="reviews-list">
+            {% for review in reviews %}
+                <div class="card border-0 shadow-sm mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="fw-bold mb-0">{{ review.author }}</h6>
+                                <small class="text-muted">{{ review.created_at|date:"d.m.Y" }}</small>
+                            </div>
+                            <div class="text-warning">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="mb-0">{{ review.text }}</p>
                     </div>
                 </div>
-                <div class="d-grid mt-4">
-                    <button class="btn btn-primary btn-lg shadow-sm">Додати у кошик</button>
-                </div>
-            </div>
+            {% empty %}
+                <p class="text-center text-muted py-4">Відгуків поки немає. Будьте першим!</p>
+            {% endfor %}
         </div>
     </div>
 </div>

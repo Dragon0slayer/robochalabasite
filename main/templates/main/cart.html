@@ -1,0 +1,96 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Кошик{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h4 class="fw-bold mb-0">Ваш кошик</h4>
+            </div>
+            <div class="card-body p-0">
+                {% if cart.items.all %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-4">Товар</th>
+                                    <th>Ціна</th>
+                                    <th>Кількість</th>
+                                    <th>Сума</th>
+                                    <th class="pe-4 text-end"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart.items.all %}
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                {% if item.chips.image %}
+                                                    <img src="{{ item.chips.image.url }}" alt="{{ item.chips.name }}" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                                {% else %}
+                                                    <div class="bg-light rounded me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                                        <i class="bi bi-image text-muted"></i>
+                                                    </div>
+                                                {% endif %}
+                                                <div>
+                                                    <h6 class="fw-bold mb-0">{{ item.chips.name }}</h6>
+                                                    <small class="text-muted">{{ item.chips.brand.name }}</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ item.chips.price }} грн</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td class="fw-bold">{{ item.total_price }} грн</td>
+                                        <td class="pe-4 text-end">
+                                            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <div class="display-1 text-muted mb-4"><i class="bi bi-cart-x"></i></div>
+                        <h4 class="fw-bold">Кошик порожній</h4>
+                        <p class="text-muted mb-4">Ви ще не додали жодного товару до кошика.</p>
+                        <a href="{% url 'products_list' %}" class="btn btn-primary px-4">Перейти до покупок</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="fw-bold mb-4">Разом</h5>
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Вартість товарів:</span>
+                    <span class="fw-bold">{{ cart.total_price }} грн</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <span>Доставка:</span>
+                    <span class="text-success fw-bold">Безкоштовно</span>
+                </div>
+                <hr class="my-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <span class="h5 fw-bold mb-0">До сплати:</span>
+                    <span class="h4 fw-bold text-primary mb-0">{{ cart.total_price }} грн</span>
+                </div>
+                <div class="d-grid">
+                    <button class="btn btn-primary btn-lg shadow-sm" {% if not cart.items.all %}disabled{% endif %}>Оформити замовлення</button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 text-center">
+            <a href="{% url 'products_list' %}" class="text-decoration-none small">
+                <i class="bi bi-arrow-left me-1"></i> Продовжити покупки
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
