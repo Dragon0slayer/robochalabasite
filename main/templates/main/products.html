@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row align-items-center mb-5">
     <div class="col-md-8">
-        <h2 class="display-5 fw-bold text-primary">Наші Чіпси</h2>
+        <h2 class="display-5 fw-bold text-primary">Наші Чипси</h2>
         <p class="text-muted lead">Знайдіть свій ідеальний смак серед {{ chips_count }} товарів від {{ brands_count }} брендів.</p>
     </div>
     <div class="col-md-4">
@@ -13,7 +13,7 @@
             <form method="get" action="{% url 'products_list' %}" class="d-flex flex-column gap-2">
                 <label for="brand" class="fw-semibold text-dark mb-0">Фільтр за брендом:</label>
                 <select name="brand" id="brand" class="form-select border-primary" onchange="this.form.submit()">
-                    <option value="">Всі бренди</option>
+                    <option value="">Всі чипси</option>
                     {% for brand in brands %}
                         <option value="{{ brand.id }}" {% if selected_brand_id == brand.id|stringformat:'s' %}selected{% endif %}>
                             {{ brand.name }}
@@ -48,13 +48,16 @@
                             <span class="fw-bold text-primary">{{ item.price }} грн</span>
                         </div>
                         <h5 class="card-title fw-bold mb-3 h4">{{ item.name }}</h5>
-                        <p class="card-text text-muted mb-4 line-clamp-2">{{ item.description|default:'Ці чіпси настільки особливі, що не потребують опису.' }}</p>
-                        <div class="d-flex flex-wrap gap-1 mt-auto">
+                        <p class="card-text text-muted mb-4 line-clamp-2">{{ item.description|default:'Ці чипси настільки особливі, що не потребують опису.' }}</p>
+                        <div class="d-flex flex-wrap gap-1 mt-auto mb-3">
                             {% for flavor in item.flavors.all %}
                                 <span class="badge bg-light text-dark border px-2 py-1 small">{{ flavor.name }}</span>
                             {% empty %}
                                 <span class="text-muted small italic">Без специфічних смаків</span>
                             {% endfor %}
+                        </div>
+                        <div class="d-grid pt-3 border-top">
+                            <button class="btn btn-primary rounded-pill">Купити</button>
                         </div>
                     </div>
                 </a>

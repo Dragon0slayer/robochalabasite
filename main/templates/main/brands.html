@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Бренди{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary">Наші Бренди</h1>
+    <p class="lead text-muted">Оберіть свій улюблений бренд, щоб переглянути всі доступні товари.</p>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for brand in brands %}
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm hover-shadow transition-all text-center p-4">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle" style="width: 80px; height: 80px;">
+                            <span class="fs-2 fw-bold">{{ brand.name|slice:":1" }}</span>
+                        </div>
+                    </div>
+                    <h3 class="card-title h4 fw-bold mb-3">{{ brand.name }}</h3>
+                    <p class="text-muted small mb-4">Перегляньте колекцію чипсів від бренду {{ brand.name }}.</p>
+                    <a href="{% url 'products_list' %}?brand={{ brand.id }}" class="btn btn-outline-primary rounded-pill px-4">Переглянути товари</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Брендів поки немає.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

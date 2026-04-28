@@ -38,6 +38,14 @@ def product_detail(request, pk):
     return render(request, 'main/product_detail.html', context)
 
 
+def brands_list(request):
+    brands = Brand.objects.order_by('name')
+    context = {
+        'brands': brands,
+    }
+    return render(request, 'main/brands.html', context)
+
+
 def about(request):
     context = {
         'brands': Brand.objects.order_by('name'),

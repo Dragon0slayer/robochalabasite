@@ -9,15 +9,25 @@
 }
 
 body {
+    margin: 0 !important;
+    padding: 0 !important;
     background-color: var(--bg-light);
     color: #1e293b;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 /* Навігація */
 .navbar {
     background-color: #0f172a !important; /* Глибокий темно-синій */
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    margin-top: 0 !important;
 }
 
 .nav-link {
@@ -90,4 +100,12 @@ body {
 /* Футер */
 footer {
     background-color: #0f172a !important;
+}
+
+.hover-white:hover {
+    color: white !important;
+}
+
+.opacity-10 {
+    opacity: 0.1;
 }
